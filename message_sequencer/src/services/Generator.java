@@ -1,6 +1,6 @@
 package services;
 
-public class Generator extends Thread{
+public class Generator{
 
     public Generator() {}
 
