@@ -1,0 +1,11 @@
+Multithreading Hinweise:
+-benutzt die .start() funktion um den thread zu starten nicht .run(). die run() methode wird eingeständig vom Thread gecalled
+-achtet darauf dass alle threads sich terminieren bevor die main durch ist, sonst entstehehn leaks
+-wenn ihr run(), interrupt() ode irgend eine andere bereits vorhandene Mehtode von Thread ersetzen willt, benutzt @Override über dem funktionskopf
+
+TODO
+-wir brauchen ne elegantere Löung als sleep(1000) in der main um die threads abzuwarten. ich würde nen watchdog, oder nen set an booleans vorschlagen die geprüft werden.
+-speichern der msg in der history sowie finales auslagern in eine log datei fehlt komplett
+-msg generator fehlt: 
+---ich würde den generator als teil des main threads machen und nicht nen extra thread dafür öffnen
+---also etra generator klasse die aber thread nicht implementiert und somit auf dem main thread läuft
