@@ -1,5 +1,6 @@
 package services;
 
+import utilities.Logger;
 import utilities.Message;
 
 import java.util.ArrayList;
@@ -40,19 +41,23 @@ public class Node extends Thread {
                 m.transform((int) this.getId(),0);  //transforms ext to internal msg
                 seq.inbox.add(m);                          //sends transformed msg to sequencer inbox
             }else{      //case internal msg
-                save(m);                                   //saves internal msg
+                saveToHistory(m);                          //saves internal msg
             }
 
         }
 
     }
     //saves message
-    private void save(Message m){
-        //TODO
-        System.out.println(m.toString());
+    private void saveToHistory(Message m){
+        this.history.add(m.toString());
     }
+
     @Override
     public void interrupt() {
+
+        Logger logger = new Logger();
+        String nodeID = String.valueOf(this.getId());
+        logger.writeHistory(nodeID, this.history);
 
         this.exit = true;
 

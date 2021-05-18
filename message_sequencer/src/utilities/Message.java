@@ -2,8 +2,8 @@ package utilities;
 
 public class Message {
 
-    private Integer nodeID;    //not in use/ additional info for demosntration
-    private Integer counter;   //not in use/ additional info for demosntration
+    private Integer nodeID;    //not in use/ additional info for demonstration
+    private Integer counter;   //not in use/ additional info for demonstration
     private Integer payload;   //msg content
     public boolean ext = true; //flag if msg is external
 
@@ -27,9 +27,11 @@ public class Message {
         //IMPORTANT remember to set flag
         this.ext = false;
     }
+
     public void setCount(Integer inc){
         this.counter=inc;
     };
+
     @Override
     public String toString() {
 
