@@ -36,7 +36,8 @@ public class Message {
     public String toString() {
 
         // Returns message of form <payload>_<nodeID>_<counter>
-        return this.payload.toString().concat("_").concat(this.nodeID.toString()).concat("_").concat(counter.toString());
+        // return this.payload.toString().concat("_").concat(this.nodeID.toString()).concat("_").concat(counter.toString());
+        return this.payload.toString().concat("_").concat(this.nodeID.toString()).concat("_");
 
     }
 

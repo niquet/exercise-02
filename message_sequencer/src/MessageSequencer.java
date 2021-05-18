@@ -14,7 +14,7 @@ public class MessageSequencer {
 
     public MessageSequencer(int numberOfThreads) {
 
-        this.generator = new Generator();
+        this.generator = null;
         this.sequencer = new Sequencer();
         this.nodeThreads = new ArrayList<>();
 
@@ -45,28 +45,32 @@ public class MessageSequencer {
     public static void main(String[] args) {
 
         int numberOfThreads = Integer.parseInt(args[0]);
+        int numberOfMessages = Integer.parseInt(args[1]);
+
         MessageSequencer messageSequencer = new MessageSequencer(numberOfThreads);
         //registers nodes in sequencer
         messageSequencer.sequencer.registerNodes(messageSequencer.nodeThreads);
 
-        for (int i=0; i<3; i++){
-            messageSequencer.nodeThreads.get(i).inbox.add(new Message(i));  //creates messages inside the inbox of a node
-        }
-        //starts and registers sequencer, then starts thread
+        messageSequencer.generator = new Generator(numberOfMessages);
+        messageSequencer.generator.generateMessages(messageSequencer.nodeThreads);
+
+        // starts and registers sequencer, then starts thread
         messageSequencer.sequencer.start();
         messageSequencer.runNodeThreads();
 
-        //lets main thread sleep before messangers are terminated
+        // lets main thread sleep before messengers are terminated
         try {
             Thread.sleep(10000);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
 
-        //before shutdown everey msg should have been printed once to the console for ever thread
-        //shutdown all running threads
+        // before shutdown every msg should have been printed once to the console for ever thread
+        // shutdown all running threads
         messageSequencer.stopNodeThreads();
         messageSequencer.sequencer.interrupt();
+
+        /** for i in ./*; do diff -q "$i" 15.txt; done */
 
     }
 
