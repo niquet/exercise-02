@@ -36,10 +36,22 @@ public class MessageSequencer {
 
     public void stopNodeThreads() {
 
+        boolean haveFinished = false;
+
+        while (!haveFinished) {
+           haveFinished = true;
+
+            for (Node node : this.nodeThreads) {
+                if (!node.inbox.isEmpty()) {
+                    haveFinished = false;
+                }
+            }
+        }
+
+
         for (Node node:this.nodeThreads) {
             node.interrupt();               //sets boolean in threads so the terminate
         }
-
     }
 
     public static void main(String[] args) {
@@ -59,11 +71,7 @@ public class MessageSequencer {
         messageSequencer.runNodeThreads();
 
         // lets main thread sleep before messengers are terminated
-        try {
-            Thread.sleep(10000);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
+
 
         // before shutdown every msg should have been printed once to the console for ever thread
         // shutdown all running threads
