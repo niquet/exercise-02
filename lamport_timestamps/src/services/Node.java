@@ -43,22 +43,21 @@ public class Node extends Thread {
             if(m==null){
                 continue;
             }
-            lock.lock();
-            try {
-                if(m.ext){  //case recieved external message
-                    clock++;
-                    m.transform((int) this.getId(),clock);  //transforms ext to internal msg
-                    receive(m);
+
+            if(m.ext){  //case recieved external message
+                clock++;
+                m.transform((int) this.getId(),clock);  //transforms ext to internal msg
+                receive(m);
+                lock.lock();
+                try {
                     broadcast(m);
-                }else{      //case internal msg
-                    receive(m);
-                    clock++;
-
+                }finally {
+                    lock.unlock();
                 }
-            }finally {
-                lock.unlock();
+            }else{      //case internal msg
+                receive(m);
+                clock++;
             }
-
 
         }
 
@@ -82,6 +81,7 @@ public class Node extends Thread {
         }
         if (clock < m.getCount()){
             l=m.getCount();
+            this.clock=l;
         }
         saveToHistory(m);                          //saves internal msg
     }

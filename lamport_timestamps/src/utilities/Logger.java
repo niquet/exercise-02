@@ -15,6 +15,7 @@ public class Logger {
 
         // path to the logfile directory
         this.path = findLogDirectory("/src/logs");
+        //this.path = findLogDirectory("/lamport_timestamps/src/logs/);
 
     }
 
@@ -32,7 +33,12 @@ public class Logger {
     }
 
     public void writeHistory(String threadID, ArrayList<String> history) {
+        Path fileToDelete = Paths.get(getPath(threadID));
+        try {
+            Files.deleteIfExists(fileToDelete);
+        } catch (IOException e) {
 
+        }
         try {
 
             String pathToLogfile = getPath(threadID);
