@@ -1,11 +1,33 @@
-Multithreading Hinweise:
--benutzt die .start() funktion um den thread zu starten nicht .run(). die run() methode wird eingeständig vom Thread gecalled
--achtet darauf dass alle threads sich terminieren bevor die main durch ist, sonst entstehehn leaks
--wenn ihr run(), interrupt() ode irgend eine andere bereits vorhandene Mehtode von Thread ersetzen willt, benutzt @Override über dem funktionskopf
+Discuss what needs to be changed in the previous implementation when using vector clocks
+instead of Lamport Timestamps. In particular, the following questions must be respected:
 
-TODO
--wir brauchen ne elegantere Löung als sleep(1000) in der main um die threads abzuwarten. ich würde nen watchdog, oder nen set an booleans vorschlagen die geprüft werden.
--speichern der msg in der history sowie finales auslagern in eine log datei fehlt komplett
--msg generator fehlt: 
----ich würde den generator als teil des main threads machen und nicht nen extra thread dafür öffnen
----also etra generator klasse die aber thread nicht implementiert und somit auf dem main thread läuft
+(1) What kind of order would be implied by the vector clocks (total order/partial
+order)?
+
+    - Vector clocks imply partial order because not every two events can be ordered
+
+(2) Would the history of all threads be identical? If not, how would you test that
+the exposed histories of the threads are correct.
+
+    - ¿QUE?
+
+(3) What are the advantages/disadvantages of using Lamport Timestamps or
+vector clocks?
+
+    - Lamport Clocks (Advantages):
+        • Enforce total ordering (by counter and then node ID)
+        • Total ordering via counters is more compact
+
+    - Lamport Clocks (Disadvantages):
+        • They do not capture causality (cannot tell whether two operations are concurrent or causally
+          dependent)
+
+    - Vector Clocks (Advantages):
+        • They capture causality (can distinguish whether two operations are concurrent or one is
+          causally dependent on the other)
+        • Timestamps are created for each event in the system
+
+    - Vector Clocks (Disadvantages):
+        • Not constant in size
+        • Each Thread needs to have an array the size of at least n, n being the number of processes
+          that can send and receive messages in the system
