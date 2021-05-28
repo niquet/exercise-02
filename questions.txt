@@ -9,7 +9,10 @@ order)?
 (2) Would the history of all threads be identical? If not, how would you test that
 the exposed histories of the threads are correct.
 
-    - ¿QUE?
+    - The history of all threads would not be identical, but all threads would result in the same partial order
+      (the concurrent events are in the same context as the causally classifiable ones in each thread)
+    - To make a comparison, the histories of the threads must be sorted, then the sorted histories can be checked
+      for equality
 
 (3) What are the advantages/disadvantages of using Lamport Timestamps or
 vector clocks?
@@ -19,8 +22,8 @@ vector clocks?
         • Total ordering via counters is more compact
 
     - Lamport Clocks (Disadvantages):
-        • They do not capture causality (cannot tell whether two operations are concurrent or causally
-          dependent)
+        • They do not capture causality (cannot tell whether two operations happen after one another
+          or are causally dependent)
 
     - Vector Clocks (Advantages):
         • They capture causality (can distinguish whether two operations are concurrent or one is
@@ -31,3 +34,6 @@ vector clocks?
         • Not constant in size
         • Each Thread needs to have an array the size of at least n, n being the number of processes
           that can send and receive messages in the system
+
+// -------------------------------------------------------------------------------------------------------------
+
