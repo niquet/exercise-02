@@ -37,3 +37,11 @@ vector clocks?
 
 // -------------------------------------------------------------------------------------------------------------
 
+Discuss what needs to be changed in the previous implementation when using vector clocks
+instead of Lamport Timestamps.
+
+    - Within each process/thread we need a vector as large as the number of processes participating in the system
+      (instead of the counter in the lamport clocks)
+    - When dispatching a process, the vector must be updated at its own index in case of an internal message and in
+      case of an external message the whole vector must now be matched (instead of selecting the (larger) timestamp in
+      the Lamport Clocks)
