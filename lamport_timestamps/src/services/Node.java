@@ -5,6 +5,7 @@ import utilities.Message;
 import utilities.MessageComp;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.locks.ReentrantLock;
 
@@ -47,7 +48,7 @@ public class Node extends Thread {
             if(m.ext){  //case recieved external message
                 clock++;
                 m.transform((int) this.getId(),clock);  //transforms ext to internal msg
-                receive(m);
+                saveToHistory(m);
                 lock.lock();
                 try {
                     broadcast(m);
@@ -57,10 +58,10 @@ public class Node extends Thread {
             }else{      //case internal msg
                 receive(m);
                 clock++;
+                m.setCount(clock);
+                saveToHistory(m);
             }
-
         }
-
     }
     //saves message
     private void saveToHistory(Message m){
@@ -74,20 +75,13 @@ public class Node extends Thread {
         }
     }
     private void receive(Message m){
-        Integer l;
-        if (clock >= m.getCount()){
-            l=clock;
-            m.setCount(l);
-        }
-        if (clock < m.getCount()){
-            l=m.getCount();
-            this.clock=l;
-        }
-        saveToHistory(m);                          //saves internal msg
+        Integer l=Math.max(clock,m.getCount());
+        this.clock=l;
     }
     @Override
     public void interrupt() {
-        this.history.sort(new MessageComp());
+        Collections.sort(history, new MessageComp());
+        //this.history.sort(new MessageComp());
         ArrayList<String> SHistory=new ArrayList<>();
         for (Message m:history) {
             SHistory.add(m.toString());

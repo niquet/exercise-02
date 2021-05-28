@@ -37,7 +37,6 @@ public class Logger {
         try {
             Files.deleteIfExists(fileToDelete);
         } catch (IOException e) {
-
         }
         try {
 
